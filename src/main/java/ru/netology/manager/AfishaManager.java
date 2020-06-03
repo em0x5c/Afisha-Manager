@@ -1,14 +1,26 @@
 package ru.netology.manager;
 
 import ru.netology.domain.PurchaseItem;
+import ru.netology.repository.AfishaRepository;
 
 import static java.lang.Math.min;
 
 public class AfishaManager {
-  // Массив всех добавленных элементов.
-  private PurchaseItem[] items = new PurchaseItem[0];
+  // Репозиторий элементов.
+  private AfishaRepository repository;
+
   // Вместимость ленты элементов.
-  private int bandCapacity;
+  private int bandCapacity = 10;
+
+  /**
+   * Создает новый экземпляр AfishaManager.
+   * @param repository - используемый репозиторий.
+   * @param bandCapacity - максимальное количество элементов в ленте.
+   */
+  public AfishaManager(AfishaRepository repository, int bandCapacity) {
+    this.repository = repository;
+    this.bandCapacity = bandCapacity;
+  }
 
   /**
    * Создает новый экземпляр AfishaManager.
@@ -19,16 +31,19 @@ public class AfishaManager {
   }
 
   /**
+   * Создает новый экземпляр AfishaManager.
+   * @param repository - используемый репозиторий.
+   */
+  public AfishaManager(AfishaRepository repository) {
+    this.repository = repository;
+  }
+
+  /**
    * Метод добавляет новый элемент.
    * @param item - добавляемый элемент.
    */
   public void addItem(PurchaseItem item) {
-    int length = items.length + 1;
-    PurchaseItem[] tmp = new PurchaseItem[length];
-    System.arraycopy(items, 0, tmp, 0, items.length);
-    int lastIndex = tmp.length - 1;
-    tmp[lastIndex] = item;
-    items = tmp;
+    repository.save(item);
   }
 
   /**
@@ -36,6 +51,7 @@ public class AfishaManager {
    * @return все элементы в обратном порядке.
    */
   public PurchaseItem[] getAllItems() {
+    PurchaseItem[] items = repository.findAll();
     PurchaseItem[] result = new PurchaseItem[items.length];
     for (int i = 0; i < result.length; i++) {
       int index = items.length - i - 1;
@@ -51,6 +67,7 @@ public class AfishaManager {
    * @return возвращает последние добавленные фильмы.
    */
   public PurchaseItem[] getLastAddedItems() {
+    PurchaseItem[] items = repository.findAll();
     PurchaseItem[] result = new PurchaseItem[min(items.length, bandCapacity)];
     int index = items.length - 1;
     int i = 0;
@@ -67,18 +84,6 @@ public class AfishaManager {
    * @param id - индекс удаляемого элемента.
    */
   public void removeItemById(int id) {
-    if (id < 0 || id >= items.length) {
-      return;
-    }
-    int length = items.length - 1;
-    PurchaseItem[] tmp = new PurchaseItem[length];
-    int index = 0;
-    for (PurchaseItem item : items) {
-      if (item.getId() != id) {
-        tmp[index] = item;
-        index++;
-      }
-    }
-    items = tmp;
+    repository.removeItemById(id);
   }
 }

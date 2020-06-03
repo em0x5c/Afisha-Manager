@@ -1,39 +1,49 @@
 package ru.netology.manager;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.domain.PurchaseItem;
+import ru.netology.repository.AfishaRepository;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 
-public class AfishaManagerNonEmptyWithSetupTest {
+@ExtendWith(MockitoExtension.class)
+public class AfishaManagerWithMockTest {
   private int bandCapacity = 5;
-  private AfishaManager manager = new AfishaManager(bandCapacity);
+  @Mock
+  private AfishaRepository repository;
+  @InjectMocks
+  private AfishaManager manager = new AfishaManager(repository, bandCapacity);
   private PurchaseItem first = new PurchaseItem(1, 1, "first");
   private PurchaseItem second = new PurchaseItem(2, 2, "second");
   private PurchaseItem third = new PurchaseItem(3, 3, "third");
 
-  @BeforeEach
-  public void setUp() {
-    manager.addItem(first);
-    manager.addItem(second);
-    manager.addItem(third);
-  }
-
   @Test
   public void shouldRemoveIfExists() {
     int idToRemove = 1;
-    manager.removeItemById(idToRemove);
+    PurchaseItem[] returned = new PurchaseItem[]{second,third};
+    doReturn(returned).when(repository).findAll();
+    doNothing().when(repository).removeItemById(idToRemove);
 
+    manager.removeItemById(idToRemove);
     PurchaseItem[] actual = manager.getAllItems();
     PurchaseItem[] expected = new PurchaseItem[]{third, second};
-
     assertArrayEquals(expected, actual);
   }
 
   @Test
   public void shouldNotRemoveIfIdGraterThanNumberOfItems() {
     int idToRemove = 3;
+    PurchaseItem[] returned = new PurchaseItem[]{first, second, third};
+    doReturn(returned).when(repository).findAll();
+    doNothing().when(repository).removeItemById(idToRemove);
+
     manager.removeItemById(idToRemove);
 
     PurchaseItem[] actual = manager.getAllItems();
@@ -45,6 +55,10 @@ public class AfishaManagerNonEmptyWithSetupTest {
   @Test
   public void shouldNotRemoveIfIdLessThanZero() {
     int idToRemove = -1;
+    PurchaseItem[] returned = new PurchaseItem[]{first, second, third};
+    doReturn(returned).when(repository).findAll();
+    doNothing().when(repository).removeItemById(idToRemove);
+
     manager.removeItemById(idToRemove);
 
     PurchaseItem[] actual = manager.getAllItems();
@@ -55,6 +69,9 @@ public class AfishaManagerNonEmptyWithSetupTest {
 
   @Test
   public void shouldReturnLastAddedItems() {
+    PurchaseItem[] returned = new PurchaseItem[]{first, second, third};
+    doReturn(returned).when(repository).findAll();
+
     PurchaseItem[] actual = manager.getLastAddedItems();
     PurchaseItem[] expected = new PurchaseItem[]{third, second, first};
 
@@ -66,6 +83,10 @@ public class AfishaManagerNonEmptyWithSetupTest {
     PurchaseItem forth = new PurchaseItem(4, 4, "forth");
     PurchaseItem fifth = new PurchaseItem(5, 5, "fifth");
     PurchaseItem sixth = new PurchaseItem(6, 6, "sixth");
+
+    PurchaseItem[] returned = new PurchaseItem[]{first, second, third, forth, fifth, sixth};
+    doReturn(returned).when(repository).findAll();
+    doNothing().when(repository).save(any(PurchaseItem.class));
 
     manager.addItem(forth);
     manager.addItem(fifth);
