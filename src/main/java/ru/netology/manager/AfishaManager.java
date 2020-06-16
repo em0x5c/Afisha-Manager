@@ -5,17 +5,39 @@ import ru.netology.domain.PurchaseItem;
 import static java.lang.Math.min;
 
 public class AfishaManager {
+  // Используемое значение по умолчанию для параметра bandCapacity,
+  // если он не задан пользоателем.
+  public static final int DEFAULT_BAND_CAPACITY = 10;
   // Массив всех добавленных элементов.
   private PurchaseItem[] items = new PurchaseItem[0];
   // Вместимость ленты элементов.
   private int bandCapacity;
 
   /**
-   * Создает новый экземпляр AfishaManager.
+   * Создает новый экземпляр AfishaManager с параметром bandCapacity по умолчанию.
+   */
+  public AfishaManager() {
+    this.bandCapacity = DEFAULT_BAND_CAPACITY;
+  }
+
+  /**
+   * Создает новый экземпляр AfishaManager с заданным bandCapacity.
+   * Если заданный пользователем bandCapacity отрицательный,
+   * то будет использовано значение по умолчанию DEFAULT_BAND_CAPACITY.
    * @param bandCapacity - максимальное количество элементов в ленте.
    */
   public AfishaManager(int bandCapacity) {
-    this.bandCapacity = bandCapacity;
+    if (bandCapacity < 0)
+      this.bandCapacity = DEFAULT_BAND_CAPACITY;
+    else
+      this.bandCapacity = bandCapacity;
+  }
+
+  /**
+   * Метод возвращает параметр bandCapacity, используемый данным AfishaManager.
+   */
+  public int getBandCapacity() {
+    return bandCapacity;
   }
 
   /**
@@ -29,19 +51,6 @@ public class AfishaManager {
     int lastIndex = tmp.length - 1;
     tmp[lastIndex] = item;
     items = tmp;
-  }
-
-  /**
-   * Возвращает все элементы в обратном порядке.
-   * @return все элементы в обратном порядке.
-   */
-  public PurchaseItem[] getAllItems() {
-    PurchaseItem[] result = new PurchaseItem[items.length];
-    for (int i = 0; i < result.length; i++) {
-      int index = items.length - i - 1;
-      result[i] = items[index];
-    }
-    return result;
   }
 
   /**
@@ -74,7 +83,7 @@ public class AfishaManager {
     PurchaseItem[] tmp = new PurchaseItem[length];
     int index = 0;
     for (PurchaseItem item : items) {
-      if (item.getId() != id) {
+      if (item.getFilmId() != id) {
         tmp[index] = item;
         index++;
       }
