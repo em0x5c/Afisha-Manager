@@ -13,9 +13,7 @@ public class AfishaRepository {
      * @return все элементы.
      */
     public PurchaseItem[] findAll() {
-        PurchaseItem[] result = new PurchaseItem[items.length];
-        System.arraycopy(items, 0, result, 0, items.length);
-        return result;
+        return items;
     }
 
     /**
@@ -38,10 +36,12 @@ public class AfishaRepository {
      * @return элемент по заданному id.
      */
     public PurchaseItem findById(int id) {
-        if (id < 0 || id >= items.length) {
-            return null;
+        for (PurchaseItem item : items) {
+            if (item.getFilmId() == id)
+                return item;
         }
-        return items[id];
+
+        return null;
     }
 
     /**
@@ -50,19 +50,16 @@ public class AfishaRepository {
      * @param id id удаляемого элемента.
      */
     public void removeItemById(int id) {
-        if (id < 0 || id >= items.length) {
-            return;
-        }
-        int length = items.length - 1;
-        PurchaseItem[] tmp = new PurchaseItem[length];
-        int index = 0;
-        for (PurchaseItem item : items) {
-            if (item.getId() != id) {
-                tmp[index] = item;
-                index++;
+        for (int i = 0; i < items.length; i++) {
+            PurchaseItem item = items[i];
+            if (item.getFilmId() == id) {
+                PurchaseItem[] tmp = new PurchaseItem[items.length - 1];
+                System.arraycopy(items, 0, tmp, 0, i);
+                System.arraycopy(items, i + 1, tmp, i, items.length - (i + 1));
+                items = tmp;
+                return;
             }
         }
-        items = tmp;
     }
 
     /**
@@ -71,5 +68,4 @@ public class AfishaRepository {
     public void removeAll() {
         items = new PurchaseItem[0];
     }
-
 }

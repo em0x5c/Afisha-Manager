@@ -6,36 +6,44 @@ import ru.netology.repository.AfishaRepository;
 import static java.lang.Math.min;
 
 public class AfishaManager {
+  // Используемое значение по умолчанию для параметра bandCapacity,
+  // если он не задан пользоателем.
+  public static final int DEFAULT_BAND_CAPACITY = 10;
   // Репозиторий элементов.
   private AfishaRepository repository;
 
   // Вместимость ленты элементов.
-  private int bandCapacity = 10;
+  private int bandCapacity;
 
   /**
    * Создает новый экземпляр AfishaManager.
+   * Если заданный пользователем bandCapacity отрицательный,
+   * то будет использовано значение по умолчанию DEFAULT_BAND_CAPACITY.
    * @param repository - используемый репозиторий.
    * @param bandCapacity - максимальное количество элементов в ленте.
    */
   public AfishaManager(AfishaRepository repository, int bandCapacity) {
     this.repository = repository;
-    this.bandCapacity = bandCapacity;
+    if (bandCapacity < 0)
+      this.bandCapacity = DEFAULT_BAND_CAPACITY;
+    else
+      this.bandCapacity = bandCapacity;
   }
 
   /**
-   * Создает новый экземпляр AfishaManager.
-   * @param bandCapacity - максимальное количество элементов в ленте.
-   */
-  public AfishaManager(int bandCapacity) {
-    this.bandCapacity = bandCapacity;
-  }
-
-  /**
-   * Создает новый экземпляр AfishaManager.
+   * Создает новый экземпляр AfishaManager с параметром bandCapacity по умолчанию.
    * @param repository - используемый репозиторий.
    */
   public AfishaManager(AfishaRepository repository) {
     this.repository = repository;
+    this.bandCapacity = DEFAULT_BAND_CAPACITY;
+  }
+
+  /**
+   * Метод возвращает параметр bandCapacity, используемый данным AfishaManager.
+   */
+  public int getBandCapacity() {
+    return bandCapacity;
   }
 
   /**
@@ -44,20 +52,6 @@ public class AfishaManager {
    */
   public void addItem(PurchaseItem item) {
     repository.save(item);
-  }
-
-  /**
-   * Возвращает все элементы в обратном порядке.
-   * @return все элементы в обратном порядке.
-   */
-  public PurchaseItem[] getAllItems() {
-    PurchaseItem[] items = repository.findAll();
-    PurchaseItem[] result = new PurchaseItem[items.length];
-    for (int i = 0; i < result.length; i++) {
-      int index = items.length - i - 1;
-      result[i] = items[index];
-    }
-    return result;
   }
 
   /**

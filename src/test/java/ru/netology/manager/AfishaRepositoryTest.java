@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AfishaRepositoryTest {
     private AfishaRepository repository = new AfishaRepository();
-    private PurchaseItem first = new PurchaseItem(1, 1, "first");
-    private PurchaseItem second = new PurchaseItem(2, 2, "second");
-    private PurchaseItem third = new PurchaseItem(3, 3, "third");
+    private PurchaseItem first = new PurchaseItem(1, "first");
+    private PurchaseItem second = new PurchaseItem(2, "second");
+    private PurchaseItem third = new PurchaseItem(3, "third");
 
     @BeforeEach
     public void setUp() {
@@ -32,19 +32,8 @@ public class AfishaRepositoryTest {
     }
 
     @Test
-    public void shouldNotRemoveIfIdGraterThanNumberOfItems() {
-        int idToRemove = 3;
-        repository.removeItemById(idToRemove);
-
-        PurchaseItem[] actual = repository.findAll();
-        PurchaseItem[] expected = new PurchaseItem[]{first, second, third};
-
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNotRemoveIfIdLessThanZero() {
-        int idToRemove = -1;
+    public void shouldNotRemoveIfIdDoesNotExist() {
+        int idToRemove = 5;
         repository.removeItemById(idToRemove);
 
         PurchaseItem[] actual = repository.findAll();
@@ -63,7 +52,7 @@ public class AfishaRepositoryTest {
 
     @Test
     public void shouldFindById() {
-        PurchaseItem second = repository.findById(1);
+        PurchaseItem second = repository.findById(2);
         assertEquals(this.second, second);
     }
 
