@@ -83,6 +83,33 @@ public class AfishaManagerNonEmptyWithSetupTest {
     AfishaManager testManager = new AfishaManager();
 
     assertEquals(AfishaManager.DEFAULT_BAND_CAPACITY, testManager.getBandCapacity());
+
+    PurchaseItem forth = new PurchaseItem(4, "forth");
+    PurchaseItem fifth = new PurchaseItem(5, "fifth");
+    PurchaseItem sixth = new PurchaseItem(6, "sixth");
+    PurchaseItem seventh = new PurchaseItem(7, "seventh");
+    PurchaseItem eighth = new PurchaseItem(8, "eighth");
+    PurchaseItem ninth = new PurchaseItem(9, "ninth");
+    PurchaseItem tenth = new PurchaseItem(10, "tenth");
+    PurchaseItem eleventh = new PurchaseItem(11, "eleventh");
+
+    testManager.addItem(first);
+    testManager.addItem(second);
+    testManager.addItem(third);
+    testManager.addItem(forth);
+    testManager.addItem(fifth);
+    testManager.addItem(sixth);
+    testManager.addItem(seventh);
+    testManager.addItem(eighth);
+    testManager.addItem(ninth);
+    testManager.addItem(tenth);
+    testManager.addItem(eleventh);
+
+
+    PurchaseItem[] actual = testManager.getLastAddedItems();
+    PurchaseItem[] expected = new PurchaseItem[]{eleventh, tenth, ninth, eighth, seventh, sixth, fifth, forth, third, second};
+
+    assertArrayEquals(expected, actual);
   }
 
   @Test
@@ -90,5 +117,32 @@ public class AfishaManagerNonEmptyWithSetupTest {
     AfishaManager testManager = new AfishaManager(-10);
 
     assertEquals(AfishaManager.DEFAULT_BAND_CAPACITY, testManager.getBandCapacity());
+
+    PurchaseItem forth = new PurchaseItem(4, "forth");
+    PurchaseItem fifth = new PurchaseItem(5, "fifth");
+    PurchaseItem sixth = new PurchaseItem(6, "sixth");
+    PurchaseItem seventh = new PurchaseItem(7, "seventh");
+    PurchaseItem eighth = new PurchaseItem(8, "eighth");
+    PurchaseItem ninth = new PurchaseItem(9, "ninth");
+    PurchaseItem tenth = new PurchaseItem(10, "tenth");
+    PurchaseItem eleventh = new PurchaseItem(11, "eleventh");
+
+    testManager.addItem(first);
+    testManager.addItem(second);
+    testManager.addItem(third);
+    testManager.addItem(forth);
+    testManager.addItem(fifth);
+    testManager.addItem(sixth);
+    testManager.addItem(seventh);
+    testManager.addItem(eighth);
+    testManager.addItem(ninth);
+    testManager.addItem(tenth);
+    testManager.addItem(eleventh);
+
+
+    PurchaseItem[] actual = testManager.getLastAddedItems();
+    PurchaseItem[] expected = new PurchaseItem[]{eleventh, tenth, ninth, eighth, seventh, sixth, fifth, forth, third, second};
+
+    assertArrayEquals(expected, actual);
   }
 }
